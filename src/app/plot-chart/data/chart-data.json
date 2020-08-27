@@ -30,5 +30,37 @@
       {"date": "2008", "value": 21},
       {"date": "2009", "value": 101}
     ]
+  },
+  {
+    "name": "Mexico",
+    "color": "green",
+    "values": [
+      {"date": "2000", "value": 45},
+      {"date": "2001", "value": 75},
+      {"date": "2002", "value": 35},
+      {"date": "2003", "value": 100},
+      {"date": "2004", "value": 137},
+      {"date": "2005", "value": 88},
+      {"date": "2006", "value": 144},
+      {"date": "2007", "value": 159},
+      {"date": "2008", "value": 20},
+      {"date": "2009", "value": 90}
+    ]
+  },
+  {
+    "name": "Brazil",
+    "color": "yellow",
+    "values": [
+      {"date": "2000", "value": 20},
+      {"date": "2001", "value": 32},
+      {"date": "2002", "value": 122},
+      {"date": "2003", "value": 119},
+      {"date": "2004", "value": 58},
+      {"date": "2005", "value": 70},
+      {"date": "2006", "value": 25},
+      {"date": "2007", "value": 44},
+      {"date": "2008", "value": 110},
+      {"date": "2009", "value": 90}
+    ]
   }
 ]

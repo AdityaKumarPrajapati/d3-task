@@ -1,30 +1,21 @@
 class LineGraph extends AbstractGraph {
-
-    DEFAULT = {
-        "WIDTH" : 500,
-        "HEIGHT" : 300,
-        "TOP" : 30,
-        "RIGHT" : 10,
-        "BOTTOM" : 10,
-        "LEFT" : 30,
-        "MARGIN" : 50,
-        "DURATION" : 250,
-        "LINE" : {
-            "OPACITY" : 0.25,
-            "OPACITY_HOVER" : 0.85,
-            "OTHER_LINE_OPACITY_HOVER" : 0.1,
-            "STROKE" : "1.5px",
-            "STROKE_HOVER" : "2.5px"
-        },
-        "CIRCLE" : {
-            "OPACITY" : 0.85,
-            "OPACITY_ON_LINE_HOVER" : "2.5px",
-            "RADIUS" : 2,
-            "RADIUS_HOVER" : 6
-        }
-    }
-
+    
     init() {
+        const width = 500;
+        const height = 300;
+        const margin = 50;
+        const duration = 250;
+
+        const lineOpacity = "0.25";
+        const lineOpacityHover = "0.85";
+        const otherLinesOpacityHover = "0.1";
+        const lineStroke = "1.5px";
+        const lineStrokeHover = "2.5px";
+
+        const circleOpacity = '0.85';
+        const circleOpacityOnLineHover = "0.25"
+        const circleRadius = 3;
+        const circleRadiusHover = 6;
         const parseDate = d3.timeParse("%Y");
         const data = this.getOriginalData();
         data.forEach(function(d) { 
@@ -38,18 +29,18 @@ class LineGraph extends AbstractGraph {
         /* Scale */
         const xScale = d3.scaleTime()
                         .domain(d3.extent(data[0].values, d => d.date))
-                        .range([0, this.DEFAULT.WIDTH-this.DEFAULT.MARGIN]);
+                        .range([0, width-margin]);
 
         const yScale = d3.scaleLinear()
                         .domain([-d3.max(data[0].values, d => d.value), d3.max(data[0].values, d => d.value)])
-                        .range([this.DEFAULT.HEIGHT-this.DEFAULT.MARGIN, 0]);
+                        .range([height-margin, 0]);
 
         /* Add SVG */
         const svg = this.getSvg()
-                    .attr("width", (this.DEFAULT.WIDTH+this.DEFAULT.MARGIN)+"px")
-                    .attr("height", (this.DEFAULT.HEIGHT+this.DEFAULT.MARGIN)+"px")
-                    .append('g')
-                    .attr("transform", `translate(${this.DEFAULT.MARGIN}, ${this.DEFAULT.MARGIN})`);
+            .attr("width", (width+margin)+"px")
+            .attr("height", (height+margin)+"px")
+            .append('g')
+            .attr("transform", `translate(${margin}, ${margin})`);
 
 
         /* Add line into SVG */
@@ -72,7 +63,7 @@ class LineGraph extends AbstractGraph {
                     .style("fill", d => d.color )        
                     .text(d.name)
                     .attr("text-anchor", "middle")
-                    .attr("x", (this.DEFAULT.WIDTH-this.DEFAULT.MARGIN)/2)
+                    .attr("x", (width-margin)/2)
                     .attr("y", 5);
                 })
             .on("mouseout", function(d) {
@@ -82,24 +73,24 @@ class LineGraph extends AbstractGraph {
             .attr('class', 'line')  
             .attr('d', d => line(d.values))
             .style('stroke', d => d.color)
-            .style('opacity', this.DEFAULT.LINE.OPACITY)
+            .style('opacity', lineOpacity)
             .on("mouseover", function(d) {
                 d3.selectAll('.line')
-                                .style('opacity', this.DEFAULT.LINE.OTHER_LINE_OPACITY_HOVER);
+                    .style('opacity', otherLinesOpacityHover);
                 d3.selectAll('.circle')
-                                .style('opacity', this.DEFAULT.CIRCLE.OPACITY_ON_LINE_HOVER);
+                    .style('opacity', circleOpacityOnLineHover);
                 d3.select(this)
-                    .style('opacity', this.DEFAULT.LINE.OPACITY_HOVER)
-                    .style("stroke-width", this.DEFAULT.LINE.STROKE_HOVER)
+                    .style('opacity', lineOpacityHover)
+                    .style("stroke-width", lineStrokeHover)
                     .style("cursor", "pointer");
                 })
             .on("mouseout", function(d) {
                 d3.selectAll(".line")
-                                .style('opacity', this.DEFAULT.LINE.OPACITY);
+                    .style('opacity', lineOpacity);
                 d3.selectAll('.circle')
-                                .style('opacity', this.DEFAULT.CIRCLE.OPACITY);
+                    .style('opacity', circleOpacity);
                 d3.select(this)
-                    .style("stroke-width", this.DEFAULT.LINE.STROKE)
+                    .style("stroke-width", lineStroke)
                     .style("cursor", "none");
                 });
 
@@ -125,35 +116,35 @@ class LineGraph extends AbstractGraph {
                 d3.select(this)
                 .style("cursor", "none")  
                 .transition()
-                .duration(this.DEFAULT.DURATION)
+                .duration(duration)
                 .selectAll(".text").remove();
             })
             .append("circle")
             .attr("cx", d => xScale(d.date))
             .attr("cy", d => yScale(d.value))
-            .attr("r", this.DEFAULT.CIRCLE.RADIUS)
-            .style('opacity', this.DEFAULT.CIRCLE.OPACITY)
+            .attr("r", circleRadius)
+            .style('opacity', circleOpacity)
             .on("mouseover", function(d) {
                 d3.select(this)
                     .transition()
-                    .duration(this.DEFAULT.DURATION)
-                    .attr("r", this.DEFAULT.CIRCLE.RADIUS_HOVER);
+                    .duration(duration)
+                    .attr("r", circleRadiusHover);
                 })
             .on("mouseout", function(d) {
                 d3.select(this) 
                     .transition()
-                    .duration(this.DEFAULT.DURATION)
-                    .attr("r", this.DEFAULT.CIRCLE.RADIUS);  
+                    .duration(duration)
+                    .attr("r", circleRadiusHover);
                 });
 
 
         /* Add Axis into SVG */
-        const xAxis = d3.axisBottom(xScale).ticks(10).tickPadding(8).tickSize(0);
-        const yAxis = d3.axisLeft(yScale).ticks(10).tickPadding(8).tickSize(0);
+        const xAxis = d3.axisBottom(xScale).ticks(6).tickPadding(8).tickSize(0);
+        const yAxis = d3.axisLeft(yScale).ticks(6).tickPadding(8).tickSize(0);
 
         svg.append("g")
             .attr("class", "xAxis axis")
-            .attr("transform", `translate(0, ${this.DEFAULT.HEIGHT-this.DEFAULT.MARGIN + 10})`)
+            .attr("transform", `translate(0, ${height-margin})`)
             .call(xAxis);
 
         svg.append("g")
@@ -163,6 +154,9 @@ class LineGraph extends AbstractGraph {
             .attr("y", 15)
             .attr("transform", "rotate(-90)")
             .attr("fill", "#000");
+
+        
+        
     }
 
     render(data) {
