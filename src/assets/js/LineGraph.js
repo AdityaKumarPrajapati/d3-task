@@ -134,7 +134,7 @@ class LineGraph extends AbstractGraph {
                 d3.select(this) 
                     .transition()
                     .duration(duration)
-                    .attr("r", circleRadiusHover);
+                    .attr("r", circleRadius);
                 });
 
 
