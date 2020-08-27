@@ -31,7 +31,11 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/js/d3.V5.js"
+              "src/assets/js/d3.V5.js",
+              "src/assets/js/deepmerge.js",
+              "src/assets/js/AbstractGraph.js",
+              "src/assets/js/VerticalAxisGraph.js",
+              "src/assets/js/LineGraph.js"
             ]
           },
           "configurations": {
@@ -125,6 +129,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "ng-poc"
+    }
+  },
+  "defaultProject": "ng-poc",
+  "cli": {
+    "analytics": "198b8a46-aa4f-46c1-8531-b57705081865"
+  }
 }

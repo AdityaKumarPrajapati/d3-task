@@ -1,5 +1,5 @@
 export class Point {
-    Label: string;
-    Value: number;
+    date: Date;
+    price: string;
 }
 

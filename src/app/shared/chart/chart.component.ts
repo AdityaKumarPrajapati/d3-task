@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Line } from './../../models/line.model';
+import { LineChartSettings } from './../../models/settings.model';
 declare const d3: any;
+declare const deepmerge: any;
+declare let LineGraph: any;
 
 @Component({
   selector: 'app-chart',
@@ -14,12 +17,16 @@ export class ChartComponent implements OnInit {
    * loosely coupled and more generic
    */
   @Input() chartData: Line;
+  @Input() chartOptions: LineChartSettings;
 
   constructor() { }
 
   ngOnInit(): void {
-    console.log(d3);
-    console.log(this.chartData);
+    let linegraph = new LineGraph('line-graph');
+    // linegraph.setOptions(this.chartOptions);
+    linegraph.render(this.chartData);
+    // console.log(deepmerge);
+    // console.log('sfsefsef',this.chartData);
   }
 
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as data from './../data/chart-data.json';
+import * as lineChartOptions from 'src/app/plot-chart/data/settings.json';
+import { LineChartSettings } from '../../models/settings.model';
 import { Line } from '../../models/line.model';
 
 @Component({
@@ -14,6 +16,7 @@ export class PlotComponent implements OnInit {
     * with Line model
     */
   data: Line;
+  lineChartOptions: LineChartSettings;
   constructor() { }
 
   /**
@@ -21,6 +24,7 @@ export class PlotComponent implements OnInit {
    */
   ngOnInit(): void {
     this.data = data.default;
+    this.lineChartOptions = lineChartOptions.default;
   }
 
 }

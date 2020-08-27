@@ -1,7 +1,9 @@
 import { Point } from './point.model';
 export class Line {
-    Label: string;
-    Color: string;
-    Type: string;
-    point: Point;
+    // Color: string;
+    // Radius: number;
+    // point: Point;
+
+    name: string;
+    values: Point;
 }

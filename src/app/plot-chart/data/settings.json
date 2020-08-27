@@ -1,0 +1,9 @@
+[
+    {
+        "debug": true,
+        "height": 300,
+        "yAxis": {
+            "revert": true
+        }
+    }
+]

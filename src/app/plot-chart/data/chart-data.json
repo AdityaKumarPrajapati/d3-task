@@ -1,72 +1,34 @@
 [
     {
-        "Label": "Grabon - Gain",
-        "Color": "#E694FF",
-        "Type": "solid",
-        "Points": [
-            {
-                "Label": "2020-01-02",
-                "Value": 1150
-            },
-            {
-                "Label": "2020-01-01",
-                "Value": 1000
-            },
-            {
-                "Label": "2020-01-0",
-                "Value": 2000
-            },
-            {
-                "Label": "2020-01-05",
-                "Value": 1800
-            },
-            {
-                "Label": "2020-01-03",
-                "Value": 1500
-            },
-            {
-                "Label": "2020-01-06",
-                "Value": 1600
-            },
-            {
-                "Label": "2020-01-07",
-                "Value": 1350
-            }
-        ]
-    },
-    {
-        "Label": "Grabon - Gain",
-        "Color": "#E694FF",
-        "Type": "solid",
-        "Points": [
-            {
-                "Label": "2020-01-02",
-                "Value": 1150
-            },
-            {
-                "Label": "2020-01-01",
-                "Value": 1000
-            },
-            {
-                "Label": "2020-01-0",
-                "Value": 2000
-            },
-            {
-                "Label": "2020-01-05",
-                "Value": 1800
-            },
-            {
-                "Label": "2020-01-03",
-                "Value": 1500
-            },
-            {
-                "Label": "2020-01-06",
-                "Value": 1600
-            },
-            {
-                "Label": "2020-01-07",
-                "Value": 1350
-            }
-        ]
-    }
+      "name": "USA",
+      "color": "red",
+      "values": [
+        {"date": "2000", "value": 200},
+        {"date": "2001", "value": 140},
+        {"date": "2002", "value": 145},
+        {"date": "2003", "value": 241},
+        {"date": "2004", "value": 101},
+        {"date": "2005", "value": 90},
+        {"date": "2006", "value": 100},
+        {"date": "2007", "value": 135},
+        {"date": "2008", "value": 121},
+        {"date": "2009", "value": 201}
+    ]
+  },
+  {
+    "name": "Canada",
+    "color": "blue",
+    "values": [
+      {"date": "2000", "value": 100},
+      {"date": "2001", "value": 120},
+      {"date": "2002", "value": 33},
+      {"date": "2003", "value": 21},
+      {"date": "2004", "value": 51},
+      {"date": "2005", "value": 10},
+      {"date": "2006", "value": 80},
+      {"date": "2007", "value": 85},
+      {"date": "2008", "value": 21},
+      {"date": "2009", "value": 101}
+    ]
+  }
 ]
