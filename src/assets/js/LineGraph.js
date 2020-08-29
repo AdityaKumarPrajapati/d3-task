@@ -154,7 +154,19 @@ class LineGraph extends AbstractGraph {
             .attr("y", 15)
             .attr("transform", "rotate(-90)")
             .attr("fill", "#000");
+        
+        
 
+        const area = d3.area()
+                        .x(d => xScale(d.date))
+                        .y0(yScale(0))
+                        .y1(d => yScale(d.value));
+        
+        svg.append('path')
+            .data(data)
+            .attr('class', 'area')
+            .attr('d', area);
+        
         
         
     }
