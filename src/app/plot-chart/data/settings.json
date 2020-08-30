@@ -1,9 +1,20 @@
 [
     {
-        "debug": true,
-        "height": 300,
-        "yAxis": {
-            "revert": true
-        }
+        "margin" : {
+            "top" : 30,
+            "right" : 20,
+            "bottom" : 30,
+            "left" : 50
+        },
+        "duration" : 250,
+        "lineOpacity" : "0.75",
+        "lineOpacityHover" : "0.85",
+        "otherLinesOpacityHover" : "0.1",
+        "lineStroke" : "1.5px",
+        "lineStrokeHover" : "2.5px",
+        "circleOpacity" : "0.85",
+        "circleOpacityOnLineHover" : "0.25",
+        "circleRadius" : 3,
+        "circleRadiusHover" : 6
     }
 ]

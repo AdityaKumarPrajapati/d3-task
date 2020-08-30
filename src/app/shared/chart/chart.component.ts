@@ -3,9 +3,7 @@ import { Line } from './../../models/line.model';
 import { LineChartSettings } from './../../models/settings.model';
 import * as d3 from 'd3-selection';
 import * as d3Scale from 'd3-scale';
-import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import * as d3Shape from 'd3-shape';
-import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
 declare const d3: any;
 
@@ -16,21 +14,8 @@ declare const d3: any;
 })
 export class ChartComponent implements OnInit {
 
-  width = 500;
-  height = 300;
-  margin = 50;
-  duration = 250;
-
-  lineOpacity = "0.25";
-  lineOpacityHover = "0.85";
-  otherLinesOpacityHover = "0.1";
-  lineStroke = "1.5px";
-  lineStrokeHover = "2.5px";
-
-  circleOpacity = '0.85';
-  circleOpacityOnLineHover = "0.25"
-  circleRadius = 3;
-  circleRadiusHover = 6;
+  width: any;
+  height: any;
   svg: any;
   g : any;
   xScale : any;
@@ -41,6 +26,7 @@ export class ChartComponent implements OnInit {
   xAxis: any;
   yAxis: any;
   areaGenerator: any;
+  minMaxData: any;
 
   /**
    * chartData is a input property for this component. Input properties make our components
@@ -52,12 +38,37 @@ export class ChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('here');
+    this.getVal(this.chartData);
     this.init(this.chartData);
   }
 
+  /* Data Modification */
+  private getVal(data: any): any {
+    const i = data[0].values.length;
+    for(let j = 0; j < i; j++) {
+      const max = d3.max(
+        data.map((item: any) => item.values[j].value)
+      )
+      const min = d3.min(
+        data.map((item: any) => item.values[j].value)
+      )
+      const date = d3.min(
+        data.map((item: any) => item.values[j].date)
+      )
+      data[0].values[j].min = min;
+      data[0].values[j].max = max;
+    }
+    return data;
+  }
+
+
+  /* Graph Plotting */
   private init(data: any): void {
+    const { margin, duration, lineOpacity, lineOpacityHover, otherLinesOpacityHover, lineStroke, lineStrokeHover, circleOpacity, circleOpacityOnLineHover, circleRadius, circleRadiusHover } = this.chartOptions[0];
     this.parseDate = d3.timeParse("%Y");
+
+    this.width = 600 - margin.left - margin.right,
+    this.height = 270 - margin.top - margin.bottom;
 
     data.forEach((d: any) =>  { 
       d.values.forEach((d: any) =>  {
@@ -66,81 +77,73 @@ export class ChartComponent implements OnInit {
       });
     });
 
+    /* Scaling */ 
     this.xScale = d3Scale.scaleTime()
-                    .domain(d3.extent(data[0].values, (d: any) => d.date))
-                    .range([0, this.width-this.margin]);
+                          .range([0, this.width]);
     
     this.yScale = d3Scale.scaleLinear()
-                    .domain([-d3.max(data[0].values, (d: any) => d.value), d3.max(data[0].values, (d: any) => d.value)])
-                    .range([this.height-this.margin, 0]);
+                          .range([this.height, 0]);
 
-    this.svg = d3.select('#line-graph')
-                  .append('svg').style("overflow", "auto")
-                  .attr("width", (this.width+this.margin)+"px")
-                  .attr("height", (this.height+this.margin)+"px")
-                  .append('g')
-                  .attr("transform", `translate(${this.margin}, ${this.margin})`);
+    this.xScale.domain(d3.extent(data[0].values, (d: any) => d.date));
+    this.yScale.domain([-d3.max(data[0].values, (d: any) => d.value), d3.max(data[0].values, (d: any) => d.value)]);
+    
+    
+    /* Axis */
+    this.xAxis = d3Axis.axisBottom(this.xScale).ticks(5).tickPadding(8).tickSize(0);;
+    this.yAxis = d3Axis.axisLeft(this.yScale).ticks(5).tickPadding(8).tickSize(0);;
 
+    /* Line Generator */
     this.line = d3Shape.line()
                       .x((d: any) => this.xScale(d.date))
                       .y((d: any) => this.yScale(d.value));
 
+    /* Area Generator */
     this.areaGenerator = d3Shape.area()
                     .x((d: any) => this.xScale(d.date))
-                    .y0(this.height)
-                    .y1((d: any) => this.yScale(d.value));
-    
-    this.lines = this.svg.append('g').attr('class', 'lines');
+                    .y0((d: any) => this.yScale(d.min))
+                    .y1((d: any) => this.yScale(d.max));
 
-    this.lines.selectAll('.line-group')
+    this.svg = d3.select('#line-graph')
+                  .append('svg')
+                  .attr("width", this.width + margin.left + margin.right)
+                  .attr("height", this.height + margin.top + margin.bottom)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    
+    /* Add the Area */
+    this.svg.append('path')
+            .datum(data[0].values)
+            .attr('class', 'area')
+            .attr('fill', 'lightgrey')
+            .attr('stroke-width', 0)
+            .attr('d', this.areaGenerator);
+
+
+    /* Add the Value Line */            
+    this.svg.selectAll('.line-group')
             .data(data).enter()
             .append('g')
             .attr('class', 'line-group')  
             .attr('fill', 'none')
             .attr('stroke-width', 2)
-            .on("mouseover", function(d: any, i: any) {
-                this.svg.append("text")
-                    .attr("class", "title-text")
-                    .style("fill", (d: any) => d.color )        
-                    .text(d.name)
-                    .attr("text-anchor", "middle")
-                    .attr("x", (this.width-this.margin)/2)
-                    .attr("y", 5);
-                })
-            .on("mouseout", (d: any) =>  {
-                this.svg.select(".title-text").remove();
-                })
             .append('path')
             .attr('class', 'line')  
             .attr('d', (d: any) => this.line(d.values))
             .style('stroke', (d: any) => d.color)
-            .style('opacity', this.lineOpacity)
-            .on("mouseover", (d: any) =>  {
-                d3.selectAll('.line')
-                    .style('opacity', this.otherLinesOpacityHover);
-                d3.selectAll('.circle')
-                    .style('opacity', this.circleOpacityOnLineHover);
-                d3.select(this)
-                    .style('opacity', this.lineOpacityHover)
-                    .style("stroke-width", this.lineStrokeHover)
-                    .style("cursor", "pointer");
-                })
-            .on("mouseout", (d: any) => {
-                d3.selectAll(".line")
-                    .style('opacity', this.lineOpacity);
-                d3.selectAll('.circle')
-                    .style('opacity', this.circleOpacity);
-                d3.select(this)
-                    .style("stroke-width", this.lineStroke)
-                    .style("cursor", "none");
-                });
+            .style('opacity', lineOpacity);
 
-    
+    this.svg.append('g')
+            .attr('class', 'x axis')
+            .attr("transform", "translate(0," + this.height + ")")
+            .call(this.xAxis);
 
-    // this.lines.
+    this.svg.append("g")         
+          .attr("class", "y axis")
+          .call(this.yAxis);
 
-    /* Add circles in the line */
-    this.lines.selectAll("circle-group")
+    // /* Add circles in the line */
+    this.svg.selectAll("circle-group")
         .data(data).enter()
         .append("g")
         .style("fill", (d: any) => d.color)
@@ -148,57 +151,10 @@ export class ChartComponent implements OnInit {
         .data((d: any) => d.values).enter()
         .append("g")
         .attr("class", "circle")  
-        .on("mouseover", (d: any) => {
-            d3.select(this)     
-            .style("cursor", "pointer")
-            .append("text")
-            .attr("class", "text")
-            .text(`${d.value}`)
-            .attr("x", (d: any) => this.xScale(d.date) + 5)
-            .attr("y", (d: any) => this.yScale(d.value) - 10);
-        })
-        .on("mouseout", (d: any) => {
-            d3.select(this)
-            .style("cursor", "none")  
-            .transition()
-            .duration(this.duration)
-            .selectAll(".text").remove();
-        })
         .append("circle")
         .attr("cx", (d: any) => this.xScale(d.date))
         .attr("cy", (d: any) => this.yScale(d.value))
-        .attr("r", this.circleRadius)
-        .style('opacity', this.circleOpacity)
-        .on("mouseover", (d: any) => {
-            d3.select(this)
-                .transition()
-                .duration(this.duration)
-                .attr("r", this.circleRadiusHover);
-            })
-        .on("mouseout", (d: any) => {
-            d3.select(this) 
-                .transition()
-                .duration(this.duration)
-                .attr("r", this.circleRadius);
-            });
-
-    this.xAxis = d3Axis.axisBottom(this.xScale).ticks(6).tickPadding(8).tickSize(0);
-    this.yAxis = d3Axis.axisLeft(this.yScale).ticks(6).tickPadding(8).tickSize(0);
-
-    this.svg.append("g")
-          .attr("class", "xAxis axis")
-          .attr("transform", `translate(0, ${this.height-this.margin})`)
-          .call(this.xAxis);
-
-    this.svg.append("g")
-        .attr("class", "yAxis axis")
-        .call(this.yAxis)
-        .append('text')
-        .attr("y", 15)
-        .attr("transform", "rotate(-90)")
-        .attr("fill", "#000");
-
-    
+        .attr("r", circleRadius)
+        .style('opacity', circleOpacity);
   }
-
 }

@@ -32,10 +32,6 @@
             ],
             "scripts": [
               "src/assets/js/d3.V5.js",
-              "src/assets/js/deepmerge.js",
-              "src/assets/js/AbstractGraph.js",
-              "src/assets/js/VerticalAxisGraph.js",
-              "src/assets/js/LineGraph.js"
             ]
           },
           "configurations": {

@@ -53,9 +53,7 @@ Compiles the Angular app into dist/ output folder.
 Execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## ScreenShots
-![Screenshot of running application](/d3.png)
-![On Hover](/hover.png)
-![Data On Hover](/data_hover.png) 
+![Screenshot of running application](/d3-chart.png)
 
 ## Improvements
 1. Addition of Unit test cases.
