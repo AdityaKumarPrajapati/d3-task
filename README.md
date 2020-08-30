@@ -50,6 +50,7 @@ Compiles the Angular app into dist/ output folder.
 ```
 5. npm run e2e
 ```
+Execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## ScreenShots
 ![Screenshot of running application](/d3-chart.png)
